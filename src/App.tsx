@@ -5,6 +5,8 @@ import ReminderList from "./components/ReminderList";
 import Reminder from "./models/reminder";
 import reminderService from "./services/reminder";
 import reminder from "./services/reminder";
+import NewReminder from "./components/NewReminder";
+import { title } from "process";
 
 function App() {
 	const [reminders, setReminders] = useState<Reminder[]>([]);
@@ -22,8 +24,14 @@ function App() {
 		setReminders(reminders.filter((reminder) => reminder.id !== id));
 	};
 
+	const addReminder = async (title: string) => {
+		const newReminder = await reminderService.addReminder(title);
+		setReminders([newReminder, ...reminders]);
+	};
+
 	return (
 		<div className="App">
+			<NewReminder onAddReminder={addReminder} />
 			<ReminderList items={reminders} onRemoveReminder={removeReminder} />
 		</div>
 	);
